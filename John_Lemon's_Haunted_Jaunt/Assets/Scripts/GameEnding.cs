@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class GameEnding : MonoBehaviour {
     public float fadeDuration = 1f;
+    public float displayImageDuration = 1f;
     public GameObject player;
     public CanvasGroup exitBackgroundImageCanvasGroup;
+    public CanvasGroup caughtBackgroundImageCanvasGroup;
 
     bool m_IsPlayerAtExit;
+    bool m_IsPlayerCaught;
     float m_timer;
 
     private void OnTriggerEnter(Collider other)
@@ -21,11 +24,21 @@ public class GameEnding : MonoBehaviour {
     {
         if (m_IsPlayerAtExit)
         {
-            EndLevel();
+            EndLevel(exitBackgroundImageCanvasGroup);
         }
+        else if (m_IsPlayerCaught)
+        {
+            EndLevel(caughtBackgroundImageCanvasGroup);
+        }
+
     }
-    void EndLevel()
+    void EndLevel(CanvasGroup imageCanvasGroup)
     {
         m_timer += Time.deltaTime;
+        imageCanvasGroup.alpha = (m_timer / fadeDuration);
+        if (m_timer > fadeDuration + displayImageDuration)
+        {
+            Application.Quit();
+        }
     }
 }
